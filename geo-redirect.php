@@ -170,12 +170,17 @@ class Geo_Redirect{
 
             foreach($this->geo_redirect_data['redirect'] as $data) {
 
-                if ($this->country_id == $data['country_id']) {
+                if (!$data['is_except'] && $this->country_id == $data['country_id']) {
 
                     $this->selectRedirectOption($data);
                     return;
 
-                } elseif (-1 == $data['country_id']) {
+				} elseif ($data['is_except'] && $this->country_id != $data['country_id']) {
+
+					$this->selectRedirectOption($data);
+					return;
+
+				} elseif (-1 == $data['country_id']) {
                     $default_data = $data;
                 }
             }

@@ -114,6 +114,12 @@ function geo_redirect_admin_page_display(){
                 '<input type="hidden" name="country_ids[]" value="'.$data['country_id'].'"/>'.
                 '<p><b>'.$countries[$data['country_id']].'</b></p>'.
                 '</td>'.
+				'<td>'.
+                    '<p><select name="is_excepts[]">'.
+                        '<option value="0" ' . (($data['is_except'] == 0) ? 'selected="selected"' : '') . ' >None</option>'.
+                        '<option value="1" ' . (($data['is_except'] == 1) ? 'selected="selected"' : '') . ' >Except</option>'.
+                    '</select></p>'.
+                '</td>'.
                 '<td>'.
                 '<p><select class="redirect_options" name="redirect_options[]" onchange="geoRedirect.switchOption(this);">'.
                 '<option value="1" ' . (($data['redirect_option'] == 1) ? 'selected="selected"' : '') . ' >Language Code</option>'.
@@ -139,6 +145,11 @@ function geo_redirect_admin_page_display(){
         '<td>'.
         '<input type="hidden" name="country_ids[]" value="' . $default_redirect['country_id'] . '"/>'.
         '<p><b>Default redirect</b></p>'.
+        '</td>'.
+		'<td>'.
+            '<p><select name="is_excepts[]">'.
+                '<option value="0" ' . (($data['is_except'] == 0) ? 'selected="selected"' : '') . ' >None</option>'.
+            '</select></p>'.
         '</td>'.
         '<td>'.
         '<p><select class="redirect_options" name="redirect_options[]" onchange="geoRedirect.switchOption(this);">'.
@@ -314,6 +325,7 @@ function geo_redirect_save(){
     $pretties 	        = (array) $_POST['pretties'];
     $domains 		    = (array) $_POST['domains'];
     $urls 			    = (array) $_POST['urls'];
+	$is_excepts         = (array) $_POST['is_excepts'];
     $only_outsite 	    = intval($_POST['only_outsite']);
     $only_root 	        = intval($_POST['only_root']);
     $only_once          = intval($_POST['only_once']);
@@ -331,6 +343,7 @@ function geo_redirect_save(){
             $redirect[] = array('country_id' 	    => intval($country_id),
                 'redirect_option' 	=> intval($redirect_options[$key]),
                 'lang_code' 	    => (string) htmlspecialchars( strtolower( trim( strip_tags( $lang_codes[$key] ) ) ) ),
+				'is_except'         => intval($is_excepts[$key]),
                 'pretty'            => (in_array(intval($country_id),$pretties))?1:0,
                 'domain' 		    => $domain,
                 'url' 			    => (string) htmlspecialchars( trim( strip_tags( $urls[$key] ) ) ) );
