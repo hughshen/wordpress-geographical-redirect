@@ -311,7 +311,13 @@ function geo_redirect_client_location() {
     $geo->checkIfRedirectNeeded();
 }
 
-if (!is_admin()) {
+// no redirect when login in to admin panel
+// $current_url = home_url(add_query_arg(array()));
+$queryString = $_SERVER['REQUEST_URI'];
+$redirectFlag = true;
+if ((strpos($queryString, 'wp-admin') !== false) || (strpos($queryString, 'sp-login') !== false)) $redirectFlag = false;
+
+if (!is_admin() && $redirectFlag) {
     do_action('check_client_location');
 }
 
